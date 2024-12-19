@@ -24,7 +24,6 @@
     <meta property="article:published_time" content="2024-12-19T00:00:00+00:00">
     <link rel="icon" href="favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="./assets/styles.css">
     <link rel="canonical" href="https://dorpascal.com/PyFace3D/">
     <script type="application/ld+json">
     {
@@ -61,9 +60,205 @@
         gtag('js', new Date());
         gtag('config', 'G-T7HFKFX0PR');
     </script>
+    <!-- End Google Tag Manager -->
+    <style>
+        :root {
+            --primary-color: #4a90e2;
+            --background-dark: #1a1a1a;
+            --text-light: #ffffff;
+            --text-dark: #333333;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+            color: var(--text-light);
+            min-height: 100vh;
+        }
+
+        .header {
+            background: rgba(26, 26, 26, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--primary-color);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            text-decoration: none;
+            color: var(--text-light);
+            background: rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            background: var(--primary-color);
+            transform: translateY(-2px);
+        }
+
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text-light);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .viewer-section {
+            height: 100vh;
+            padding-top: 60px;
+            position: relative;
+        }
+
+        #model-viewer {
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, #2a2a2a 0%, #1a1a1a 100%);
+        }
+
+        .viewer-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.8);
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            font-size: 1.2rem;
+        }
+
+        .controls-panel {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 2rem;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 1rem;
+            border-radius: 12px;
+            backdrop-filter: blur(5px);
+        }
+
+        .control-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .auto-rotate-toggle {
+            position: absolute;
+            top: 7rem;
+            right: 2rem;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: none;
+            color: var(--text-light);
+            transition: all 0.3s ease;
+        }
+
+        .auto-rotate-toggle:hover {
+            background: var(--primary-color);
+        }
+
+        footer {
+            padding: 1rem;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.8);
+        }
+
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: block;
+            }
+
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: rgba(26, 26, 26, 0.95);
+                backdrop-filter: blur(10px);
+                padding: 1rem;
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .controls-panel {
+                flex-direction: column;
+                gap: 0.5rem;
+                bottom: 1rem;
+                width: 90%;
+                max-width: 300px;
+            }
+
+            .auto-rotate-toggle {
+                top: auto;
+                bottom: 8rem;
+                right: 50%;
+                transform: translateX(50%);
+            }
+        }
+    </style>
 </head>
 <body>
-    <!-- Rest of the HTML remains the same -->
     <header class="header">
         <div class="container">
             <nav class="nav">
@@ -71,6 +266,9 @@
                     <i class="fas fa-cube"></i>
                     PyFace3D Demo
                 </div>
+                <button class="menu-toggle" aria-label="Toggle menu">
+                    <i class="fas fa-bars"></i>
+                </button>
                 <div class="nav-links">
                     <a href="https://dorpascal.com" class="btn">
                         <i class="fas fa-home"></i>
@@ -92,6 +290,10 @@
     <section class="viewer-section">
         <div id="model-viewer"></div>
         <div class="viewer-overlay">Loading 3D Model...</div>
+        <button class="auto-rotate-toggle">
+            <i class="fas fa-sync-alt"></i>
+            Auto-Rotate
+        </button>
         <div class="controls-panel">
             <div class="control-item">
                 <i class="fas fa-mouse"></i>
@@ -114,7 +316,6 @@
         </div>
     </footer>
 
-    <!-- Scripts remain the same -->
     <script type="importmap">
     {
         "imports": {
@@ -132,7 +333,49 @@
 
         // Scene setup
         const scene = new THREE.Scene();
-        scene.background = new THREE.Color(0x1a1a1a);
+
+        // Create gradient background
+        const vertexShader = `
+            varying vec2 vUv;
+            void main() {
+                vUv = uv;
+                gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+            }
+        `;
+
+        const fragmentShader = `
+            varying vec2 vUv;
+            uniform float time;
+
+            void main() {
+                vec2 center = vec2(0.5, 0.5);
+                float dist = length(vUv - center);
+
+                vec3 color1 = vec3(0.1, 0.1, 0.1);
+                vec3 color2 = vec3(0.16, 0.16, 0.16);
+
+                float t = sin(time * 0.001) * 0.5 + 0.5;
+                float mixValue = smoothstep(0.0, 1.0, dist + t * 0.2);
+
+                vec3 color = mix(color1, color2, mixValue);
+                gl_FragColor = vec4(color, 1.0);
+            }
+        `;
+
+        const backgroundMaterial = new THREE.ShaderMaterial({
+            vertexShader,
+            fragmentShader,
+            uniforms: {
+                time: { value: 0 }
+            }
+        });
+
+        const backgroundGeometry = new THREE.PlaneGeometry(2, 2);
+        const backgroundMesh = new THREE.Mesh(backgroundGeometry, backgroundMaterial);
+        backgroundMesh.position.z = -1;
+        const backgroundCamera = new THREE.OrthographicCamera(-1, 1, 1, -1, -1, 1);
+        const backgroundScene = new THREE.Scene();
+        backgroundScene.add(backgroundMesh);
 
         // Get the container dimensions
         const container = document.getElementById('model-viewer');
@@ -141,7 +384,6 @@
 
         // Camera setup
         const camera = new THREE.PerspectiveCamera(60, width / height, 0.1, 1000);
-
         camera.position.z = 4;
 
         // Renderer setup
@@ -164,6 +406,29 @@
         controls.dampingFactor = 0.05;
         controls.minDistance = 2;
         controls.maxDistance = 6;
+
+        // Auto-rotation
+        let autoRotate = false;
+        const autoRotateToggle = document.querySelector('.auto-rotate-toggle');
+        autoRotateToggle.addEventListener('click', () => {
+            autoRotate = !autoRotate;
+            controls.autoRotate = autoRotate;
+            autoRotateToggle.style.background = autoRotate ? '#4a90e2' : 'rgba(0, 0, 0, 0.7)';
+        });
+
+        // Mobile menu toggle
+        const menuToggle = document.querySelector('.menu-toggle');
+        const navLinks = document.querySelector('.nav-links');
+        menuToggle.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.nav') && navLinks.classList.contains('active')) {
+                navLinks.classList.remove('active');
+            }
+        });
 
         // Load 3D model
         const mtlLoader = new MTLLoader();
@@ -204,9 +469,19 @@
         }
 
         // Animation loop
-        function animate() {
+        function animate(time) {
             requestAnimationFrame(animate);
             controls.update();
+
+            // Update background shader
+            backgroundMaterial.uniforms.time.value = time;
+
+            // Render background
+            renderer.autoClear = false;
+            renderer.clear();
+            renderer.render(backgroundScene, backgroundCamera);
+
+            // Render scene
             renderer.render(scene, camera);
         }
         animate();
