@@ -1,6 +1,6 @@
 numpy==1.24.0
 opencv-python==4.8.0.74
-mediapipe==0.10.0
+mediapipe
 pygame==2.5.0
 PyOpenGL==3.1.7
 scipy==1.11.2
