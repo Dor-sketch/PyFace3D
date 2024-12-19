@@ -6,3 +6,6 @@
 *.pdf
 *.png
 *.mtl
+
+!docs/
+!docs/**
