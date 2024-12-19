@@ -7,6 +7,7 @@ from OpenGL.GL import *
 from OpenGL.GLU import *
 import time
 from scipy.spatial import Delaunay
+
 def get_camera_dimensions(camera):
     """Get the actual camera dimensions"""
     ret, frame = camera.read()

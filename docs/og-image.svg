@@ -1,0 +1,165 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a1b2e;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#16171f;stop-opacity:1" />
+    </linearGradient>
+
+    <linearGradient id="accentGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#4A90E2;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#45aaf2;stop-opacity:1" />
+    </linearGradient>
+
+    <!-- Enhanced glow effect -->
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+
+    <!-- Soft shadow for depth -->
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="5"/>
+      <feOffset dx="0" dy="4"/>
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.3"/>
+      </feComponentTransfer>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background with enhanced gradient -->
+  <rect width="1200" height="630" fill="url(#bgGradient)"/>
+
+  <!-- Animated tech grid -->
+  <pattern id="techGrid" width="40" height="40" patternUnits="userSpaceOnUse">
+    <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#2a2b3d" stroke-width="1">
+      <animate attributeName="stroke-opacity" values="0.2;0.4;0.2" dur="4s" repeatCount="indefinite"/>
+    </path>
+  </pattern>
+  <rect width="1200" height="630" fill="url(#techGrid)"/>
+
+  <!-- Main Title Group - At top -->
+  <g transform="translate(0, 140)" filter="url(#shadow)">
+    <text x="600" y="0"
+          font-family="Arial, sans-serif"
+          font-size="72"
+          font-weight="bold"
+          fill="white"
+          text-anchor="middle"
+          filter="url(#glow)">
+      PyFace3D
+    </text>
+
+    <text x="600" y="50"
+          font-family="Arial, sans-serif"
+          font-size="32"
+          fill="#4A90E2"
+          text-anchor="middle">
+      Real-time 3D Local Facial Mesh Generation
+    </text>
+  </g>
+
+  <!-- Centered Face Model -->
+  <g transform="translate(-60,30) scale(1.2)">
+    <!-- Main face outline -->
+    <g filter="url(#glow)">
+      <path d="M400 200 Q 550 150 700 200 Q 750 300 700 400 Q 550 450 400 400 Q 350 300 400 200"
+            fill="none"
+            stroke="url(#accentGradient)"
+            stroke-width="3"/>
+
+      <!-- Enhanced depth visualization -->
+      <path d="M380 190 Q 530 140 680 190 Q 730 290 680 390 Q 530 440 380 390 Q 330 290 380 190"
+            fill="none"
+            stroke="#2a5c8f"
+            stroke-width="2"
+            opacity="0.6"/>
+
+      <!-- Improved 3D effect lines -->
+      <g stroke="#4A90E2" stroke-width="1.5" opacity="0.4">
+        <line x1="400" y1="200" x2="380" y2="190"/>
+        <line x1="700" y1="200" x2="680" y2="190"/>
+        <line x1="700" y1="400" x2="680" y2="390"/>
+        <line x1="400" y1="400" x2="380" y2="390"/>
+      </g>
+
+      <!-- Interactive landmark points -->
+      <g fill="#45aaf2">
+        <circle cx="400" cy="200" r="5">
+          <animate attributeName="r" values="4;6;4" dur="2s" repeatCount="indefinite"/>
+        </circle>
+        <circle cx="550" cy="150" r="5">
+          <animate attributeName="r" values="4;6;4" dur="2s" repeatCount="indefinite" begin="0.5s"/>
+        </circle>
+        <circle cx="700" cy="200" r="5">
+          <animate attributeName="r" values="4;6;4" dur="2s" repeatCount="indefinite" begin="1s"/>
+        </circle>
+        <circle cx="750" cy="300" r="5">
+          <animate attributeName="r" values="4;6;4" dur="2s" repeatCount="indefinite" begin="1.5s"/>
+        </circle>
+      </g>
+
+      <!-- Enhanced mesh visualization -->
+      <g stroke="url(#accentGradient)" stroke-width="1" opacity="0.3">
+        <path d="M400 200 L 550 150 L 700 200 Z"/>
+        <path d="M400 400 L 550 450 L 700 400 Z"/>
+        <path d="M550 150 L 550 450"/>
+        <path d="M400 200 L 700 400"/>
+        <path d="M700 200 L 400 400"/>
+      </g>
+    </g>
+  </g>
+
+  <!-- Technology badges with improved styling -->
+  <g transform="translate(200, 500)">
+    <!-- Python -->
+    <g transform="translate(0,0)" filter="url(#shadow)">
+      <rect x="0" y="-20" width="150" height="45" rx="22.5"
+            fill="#1a1b2e" stroke="#4A90E2" stroke-width="2"/>
+      <text x="75" y="8"
+            font-family="Arial, sans-serif"
+            font-size="20"
+            fill="white"
+            text-anchor="middle">Python</text>
+    </g>
+
+    <!-- OpenGL -->
+    <g transform="translate(200,0)" filter="url(#shadow)">
+      <rect x="0" y="-20" width="150" height="45" rx="22.5"
+            fill="#1a1b2e" stroke="#4A90E2" stroke-width="2"/>
+      <text x="75" y="8"
+            font-family="Arial, sans-serif"
+            font-size="20"
+            fill="white"
+            text-anchor="middle">OpenGL</text>
+    </g>
+
+    <!-- MediaPipe -->
+    <g transform="translate(400,0)" filter="url(#shadow)">
+      <rect x="0" y="-20" width="150" height="45" rx="22.5"
+            fill="#1a1b2e" stroke="#4A90E2" stroke-width="2"/>
+      <text x="75" y="8"
+            font-family="Arial, sans-serif"
+            font-size="20"
+            fill="white"
+            text-anchor="middle">MediaPipe</text>
+    </g>
+
+    <!-- Computer Vision -->
+    <g transform="translate(600,0)" filter="url(#shadow)">
+      <rect x="0" y="-20" width="190" height="45" rx="22.5"
+            fill="#1a1b2e" stroke="#4A90E2" stroke-width="2"/>
+      <text x="95" y="8"
+            font-family="Arial, sans-serif"
+            font-size="20"
+            fill="white"
+            text-anchor="middle">Computer Vision</text>
+    </g>
+  </g>
+</svg>

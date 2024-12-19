@@ -6,6 +6,8 @@
 *.pdf
 *.png
 *.mtl
+.DS_Store
+banner.svg
 
 !docs/
 !docs/**
