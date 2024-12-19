@@ -62,12 +62,12 @@
 
         // Load 3D model
         const mtlLoader = new MTLLoader();
-        mtlLoader.load('face_model_1734607784.obj.mtl', function(materials) {
+        mtlLoader.load('face_model_1734607937.obj.mtl', function(materials) {
             materials.preload();
 
             const objLoader = new OBJLoader();
             objLoader.setMaterials(materials);
-            objLoader.load('face_model_1734607784.obj', function(object) {
+            objLoader.load('face_model_1734607937.obj', function(object) {
                 // Center the model
                 const box = new THREE.Box3().setFromObject(object);
                 const center = box.getCenter(new THREE.Vector3());
