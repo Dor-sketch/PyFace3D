@@ -1,1 +1,6 @@
 .venv/*
+*.obj
+*.ply
+*.dat
+*.pkl
+*.pdf
