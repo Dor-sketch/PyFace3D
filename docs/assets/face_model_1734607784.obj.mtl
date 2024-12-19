@@ -1,0 +1,5 @@
+newmtl face_material
+Ka 1.000 1.000 1.000
+Kd 1.000 1.000 1.000
+Ks 0.000 0.000 0.000
+map_Kd face_texture_1734607784.png

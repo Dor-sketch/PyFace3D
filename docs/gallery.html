@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Face3D Gallery - Real-time 3D Face Modeling</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #3b82f6;
+            --gradient-start: #1a1a1a;
+            --gradient-end: #2a2a2a;
+            --accent: #3b82f6;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            color: #fff;
+            min-height: 100vh;
+        }
+
+        header {
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+            padding: 1rem 0;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--accent);
+        }
+
+        .process-section {
+            padding: 8rem 0 4rem;
+        }
+
+        .process-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .step-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 1rem;
+            padding: 2rem;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .step-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            background: var(--accent);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-weight: bold;
+        }
+
+        .step-icon {
+            font-size: 2rem;
+            color: var(--accent);
+            margin: 1rem 0;
+        }
+
+        .gallery-section {
+            padding: 2rem 0;
+        }
+
+        .gallery-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .filter-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .filter-btn {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: white;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .filter-btn.active {
+            background: var(--accent);
+        }
+
+        #grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .model-container {
+            aspect-ratio: 1;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 1rem;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s;
+        }
+
+        .model-container:hover {
+            transform: translateY(-5px);
+        }
+
+        .model-info {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .model-timestamp {
+            font-size: 0.9rem;
+            color: #aaa;
+        }
+
+        .model-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .action-btn {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            transition: background 0.3s;
+        }
+
+        .action-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        canvas {
+            width: 100%;
+            height: 100%;
+        }
+
+        .stats-section {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 4rem 0;
+            margin: 4rem 0;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            text-align: center;
+        }
+
+        .stat-card {
+            padding: 2rem;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: #aaa;
+        }
+
+        footer {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 2rem 0;
+            margin-top: 4rem;
+        }
+
+        @media (max-width: 768px) {
+            .process-steps {
+                grid-template-columns: 1fr;
+            }
+
+            .filter-buttons {
+                display: none;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav class="nav">
+                <div class="logo">
+                    <i class="fas fa-cube"></i>
+                    Face3D Gallery
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <section class="process-section">
+        <div class="container">
+            <h2>How It Works</h2>
+            <div class="process-steps">
+                <div class="step-card">
+                    <div class="step-number">1</div>
+                    <i class="fas fa-camera step-icon"></i>
+                    <h3>Capture</h3>
+                    <p>2-second webcam capture with real-time face tracking</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">2</div>
+                    <i class="fas fa-cube step-icon"></i>
+                    <h3>Generate</h3>
+                    <p>Instant 3D mesh generation with 468 facial landmarks</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <i class="fas fa-paint-brush step-icon"></i>
+                    <h3>Texture</h3>
+                    <p>Automatic UV mapping and texture generation</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">4</div>
+                    <i class="fas fa-file-export step-icon"></i>
+                    <h3>Export</h3>
+                    <p>Save as standard OBJ format with materials</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="stats-section">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">2s</div>
+                    <div class="stat-label">Processing Time</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">468</div>
+                    <div class="stat-label">Face Landmarks</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">100%</div>
+                    <div class="stat-label">Real-time</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">13</div>
+                    <div class="stat-label">Models Generated</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="gallery-section">
+        <div class="container">
+            <div class="gallery-header">
+                <h2>Model Gallery</h2>
+                <div class="filter-buttons">
+                    <button class="filter-btn active">All</button>
+                    <button class="filter-btn">Recent</button>
+                    <button class="filter-btn">Featured</button>
+                </div>
+            </div>
+            <div id="grid"></div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>Built with MediaPipe, OpenGL & Three.js</p>
+        </div>
+    </footer>
+
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://unpkg.com/three@0.158.0/build/three.module.js",
+            "three/addons/": "https://unpkg.com/three@0.158.0/examples/jsm/"
+        }
+    }
+    </script>
+
+    <script type="module">
+        import * as THREE from 'three';
+        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+        import { OBJLoader } from 'three/addons/loaders/OBJLoader.js';
+        import { MTLLoader } from 'three/addons/loaders/MTLLoader.js';
+
+        const models = [
+            'face_model_1734611030',
+            'face_model_1734610860',
+            'face_model_1734609572',
+            'face_model_1734609278',
+            'face_model_1734609275',
+            'face_model_1734609265',
+            'face_model_1734607937',
+            'face_model_1734607784',
+            'face_model_1734606963',
+            'face_model_1734606891',
+            'face_model_1734606738',
+            'face_model_1734606736',
+            'face_model_1734606631'
+        ];
+
+        models.forEach(createModelViewer);
+
+        function createModelViewer(modelName) {
+            const container = document.createElement('div');
+            container.className = 'model-container';
+
+            const modelInfo = document.createElement('div');
+            modelInfo.className = 'model-info';
+
+            const timestamp = document.createElement('span');
+            timestamp.className = 'model-timestamp';
+            timestamp.textContent = new Date(parseInt(modelName.split('_')[2]) * 1000).toLocaleString();
+
+            const actions = document.createElement('div');
+            actions.className = 'model-actions';
+            actions.innerHTML = `
+                <button class="action-btn" title="Download Model">
+                    <i class="fas fa-download"></i>
+                </button>
+                <button class="action-btn" title="View Details">
+                    <i class="fas fa-expand"></i>
+                </button>
+            `;
+
+            modelInfo.appendChild(timestamp);
+            modelInfo.appendChild(actions);
+            container.appendChild(modelInfo);
+
+            document.getElementById('grid').appendChild(container);
+
+            const scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x222222);
+
+            const camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
+            camera.position.z = 5;
+
+            const renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setSize(300, 300);
+            renderer.setPixelRatio(window.devicePixelRatio);
+            container.insertBefore(renderer.domElement, modelInfo);
+
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+            scene.add(ambientLight);
+
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+            directionalLight.position.set(0, 1, 1);
+            scene.add(directionalLight);
+
+            const controls = new OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true;
+            controls.dampingFactor = 0.05;
+
+            const mtlLoader = new MTLLoader();
+            mtlLoader.load(`./assets/${modelName}.obj.mtl`, function(materials) {
+                materials.preload();
+
+                const objLoader = new OBJLoader();
+                objLoader.setMaterials(materials);
+                objLoader.load(`./assets/${modelName}.obj`, function(object) {
+                    const box = new THREE.Box3().setFromObject(object);
+                    const center = box.getCenter(new THREE.Vector3());
+                    object.position.sub(center);
+
+                    const size = box.getSize(new THREE.Vector3());
+                    const maxDim = Math.max(size.x, size.y, size.z);
+                    const scale = 2 / maxDim;
+                    object.scale.multiplyScalar(scale);
+
+                    scene.add(object);
+
+                    function animate() {
+                        requestAnimationFrame(animate);
+                        object.rotation.y += 0.005;
+                        controls.update();
+                        renderer.render(scene, camera);
+                    }
+                    animate();
+                });
+            });
+
+            renderer.domElement.__renderer = renderer;
+            renderer.domElement.__camera = camera;
+        }
+
+        window.addEventListener('resize', function() {
+            const containers = document.querySelectorAll('.model-container');
+            containers.forEach(container => {
+                const canvas = container.querySelector('canvas');
+                const width = container.clientWidth;
+                const height = container.clientWidth;
+                const renderer = canvas.__renderer;
+                const camera = canvas.__camera;
+
+                if (renderer && camera) {
+                    renderer.setSize(width, height);
+                    camera.aspect = width / height;
+                    camera.updateProjectionMatrix();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

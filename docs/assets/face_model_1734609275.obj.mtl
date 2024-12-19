@@ -1,0 +1,11 @@
+newmtl face_material
+Ka 1.000 1.000 1.000
+Kd 1.000 1.000 1.000
+Ks 0.000 0.000 0.000
+map_Kd face_texture_1734609275.png
+
+newmtl hair_material
+Ka 0.2 0.1 0.05
+Kd 0.2 0.1 0.05
+Ks 0.3 0.3 0.3
+Ns 10.0
