@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PyFace3D Gallery - Real-time 3D Face Modeling</title>
-    <meta name="description" content="A gallery of 3D face models generated in real-time with PyFace3D, Three.js, and MediaPipe.">
+    <meta name="description"
+        content="A gallery of 3D face models generated in real-time with PyFace3D, Three.js, and MediaPipe.">
     <meta name="keywords" content="3D face model, PyFace3D, Three.js, MediaPipe, WebGL">
     <meta name="author" content="Dor Pascal">
     <meta name="robots" content="index, follow">
@@ -14,7 +16,8 @@
     <meta name="twitter:creator" content="@DorPascalLab">
     <meta property="og:url" content="https://dorpascal.com/PyFace3D/gallery">
     <meta property="og:title" content="PyFace3D Gallery - Real-time 3D Face Modeling">
-    <meta property="og:description" content="A gallery of 3D face models generated in real-time with PyFace3D, Three.js, and MediaPipe.">
+    <meta property="og:description"
+        content="A gallery of 3D face models generated in real-time with PyFace3D, Three.js, and MediaPipe.">
     <meta property="og:image" content="https://dorpascal.com/PyFace3D/og-image.png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
@@ -256,6 +259,13 @@
                 grid-template-columns: 1fr 1fr;
             }
         }
+
+        .model-container.enlarged {
+            background: rgba(0, 0, 0, 0.8);
+            /* Add a darkened background */
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
+            /* Emphasize elevation */
+        }
     </style>
     <!-- Google Tag Manager -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-T7HFKFX0PR"></script>
@@ -266,6 +276,7 @@
         gtag('config', 'G-T7HFKFX0PR');
     </script>
 </head>
+
 <body>
     <header>
         <div class="container">
@@ -375,19 +386,15 @@
         import { MTLLoader } from 'three/addons/loaders/MTLLoader.js';
 
         const models = [
-            'face_model_1734611030',
-            'face_model_1734610860',
-            'face_model_1734609572',
-            'face_model_1734609278',
-            'face_model_1734609275',
-            'face_model_1734609265',
-            'face_model_1734607937',
-            'face_model_1734607784',
-            'face_model_1734606963',
-            'face_model_1734606891',
-            'face_model_1734606738',
-            'face_model_1734606736',
-            'face_model_1734606631'
+'face_model_1734610860',
+ 'face_model_1734611030',
+ 'face_model_1734696873',
+ 'face_model_1734696876',
+ 'face_model_1734698115',
+ 'face_model_1734699456',
+ 'face_model_1734699486',
+ 'face_model_1734699492',
+ 'face_model_1734699503'
         ];
 
         models.forEach(createModelViewer);
@@ -424,7 +431,7 @@
             scene.background = new THREE.Color(0x222222);
 
             const camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
-            camera.position.z = 5;
+            camera.position.z = 2;
 
             const renderer = new THREE.WebGLRenderer({ antialias: true });
             renderer.setSize(300, 300);
@@ -443,12 +450,12 @@
             controls.dampingFactor = 0.05;
 
             const mtlLoader = new MTLLoader();
-            mtlLoader.load(`./assets/${modelName}.obj.mtl`, function(materials) {
+            mtlLoader.load(`./assets/${modelName}.obj.mtl`, function (materials) {
                 materials.preload();
 
                 const objLoader = new OBJLoader();
                 objLoader.setMaterials(materials);
-                objLoader.load(`./assets/${modelName}.obj`, function(object) {
+                objLoader.load(`./assets/${modelName}.obj`, function (object) {
                     const box = new THREE.Box3().setFromObject(object);
                     const center = box.getCenter(new THREE.Vector3());
                     object.position.sub(center);
@@ -474,7 +481,7 @@
             renderer.domElement.__camera = camera;
         }
 
-        window.addEventListener('resize', function() {
+        window.addEventListener('resize', function () {
             const containers = document.querySelectorAll('.model-container');
             containers.forEach(container => {
                 const canvas = container.querySelector('canvas');
@@ -490,6 +497,79 @@
                 }
             });
         });
+
+        function enlargeModel(event) {
+            const container = event.target.closest('.model-container');
+            if (!container) return;
+
+            container.classList.toggle('enlarged');
+            const isEnlarged = container.classList.contains('enlarged');
+
+            // Apply or reset styles dynamically
+            if (isEnlarged) {
+                container.style.position = 'fixed';
+                container.style.top = '50%';
+                container.style.left = '50%';
+                container.style.transform = 'translate(-50%, -50%)';
+                container.style.zIndex = '10000';
+                container.style.width = '80vw';
+                container.style.height = '80vh';
+            } else {
+                container.style.position = '';
+                container.style.top = '';
+                container.style.left = '';
+                container.style.transform = '';
+                container.style.zIndex = '';
+                container.style.width = '';
+                container.style.height = '';
+            }
+
+            // Adjust canvas size for enlarged view
+            const canvas = container.querySelector('canvas');
+            const renderer = canvas.__renderer;
+            const camera = canvas.__camera;
+            if (renderer && camera) {
+                const width = container.clientWidth;
+                const height = container.clientHeight;
+                renderer.setSize(width, height);
+                camera.aspect = width / height;
+                camera.updateProjectionMatrix();
+            }
+        }
+
+        function downloadModel(event, modelName) {
+            event.stopPropagation();
+            const link = document.createElement('a');
+            link.href = `./assets/${modelName}.obj`;
+            link.download = `${modelName}.obj`;
+            link.click();
+        }
+// Update actions for each model
+models.forEach((modelName) => {
+    // Use querySelectorAll to get ALL model containers
+    const containers = document.querySelectorAll('.model-container');
+
+    // Find the specific container for this model
+    containers.forEach((container) => {
+        const actions = container.querySelector('.model-actions');
+        actions.innerHTML = `
+            <button class="action-btn" title="Download Model">
+                <i class="fas fa-download"></i>
+            </button>
+            <button class="action-btn" title="Enlarge Model">
+                <i class="fas fa-expand"></i>
+            </button>
+        `;
+
+        const [downloadBtn, enlargeBtn] = actions.children;
+
+        // Add event listeners to the buttons
+        downloadBtn.addEventListener('click', (event) => downloadModel(event, modelName));
+        enlargeBtn.addEventListener('click', enlargeModel);
+    });
+});
+
     </script>
 </body>
+
 </html>

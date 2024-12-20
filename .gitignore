@@ -7,6 +7,7 @@ venv/*
 *.pdf
 *.png
 *.mtl
+*.mov
 .DS_Store
 banner.svg
 

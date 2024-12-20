@@ -1,7 +1,0 @@
-newmtl face_material
-Ka 0.200 0.200 0.200
-Kd 0.800 0.800 0.800
-Ks 0.100 0.100 0.100
-Ns 30.000
-d 1.000
-map_Kd face_texture_1734610720.png
